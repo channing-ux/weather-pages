@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>天氣整合網</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+      background: #f0f8ff;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      margin: 5px 0;
+    }
+    a {
+      margin-left: 10px;
+      font-size: 0.9em;
+    }
+    #weather {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 10px;
+      background: #ffffff;
+      box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+      display: inline-block;
+      min-width: 250px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🌤️ 天氣小站</h1>
+  <p>點選城市名稱即可查看天氣</p>
+
+  <h2>台灣 
+    <a href="https://www.cwa.gov.tw/V8/C/" target="_blank">中央氣象署</a>
+  </h2>
+  <ul>
+    <li><button onclick="getWeather('Taipei')">台北</button></li>
+    <li><button onclick="getWeather('Taichung')">台中</button></li>
+    <li><button onclick="getWeather('Kaohsiung')">高雄</button></li>
+  </ul>
+
+  <h2>中國 
+    <a href="https://weather.cma.cn/" target="_blank">中國氣象局</a>
+  </h2>
+  <ul>
+    <li><button onclick="getWeather('Beijing')">北京</button></li>
+  </ul>
+
+  <h2>法國 
+    <a href="https://meteofrance.com/" target="_blank">法國氣象署</a>
+  </h2>
+  <ul>
+    <li><button onclick="getWeather('Paris')">巴黎</button></li>
+  </ul>
+
+  <h2>美國 
+    <a href="https://www.weather.gov/" target="_blank">美國國家氣象署</a>
+  </h2>
+  <ul>
+    <li><button onclick="getWeather('New York')">紐約</button></li>
+  </ul>
+
+  <div id="weather">請選擇城市</div>
+
+  <script>
+    const apiKey = "eee92af78eb3bc83e5c1cd39e2942893"; // 請換成你的 OpenWeather API Key
+
+    async function getWeather(city) {
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=zh_tw`;
+      try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("查詢失敗");
+        const data = await response.json();
+        document.getElementById("weather").innerHTML = `
+          <h3>${data.name} 的天氣</h3>
+          <p>🌡️ 溫度: ${data.main.temp}°C</p>
+          <p>☁️ 狀態: ${data.weather[0].description}</p>
+          <p>💧 濕度: ${data.main.humidity}%</p>
+        `;
+      } catch (error) {
+        document.getElementById("weather").innerText = "查詢失敗，請再試一次";
+      }
+    }
+  </script>
+</body>
+</html>
