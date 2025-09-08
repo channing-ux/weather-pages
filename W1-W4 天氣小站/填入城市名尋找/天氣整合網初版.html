@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>天氣整合網</title>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    h2 { margin-top: 20px; }
+    ul { list-style-type: square; }
+    li { margin: 5px 0; }
+    a { text-decoration: none; color: blue; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <h1>🌤 天氣小站</h1>
+  <p>點擊城市名稱即可查看天氣。</p>
+
+  <div>
+    <h2>台灣 
+      <a href="https://www.cwa.gov.tw/V8/C/" target="_blank">中央氣象署</a>
+    </h2>
+    <ul>
+      <li><a href="#" onclick="getWeather('Taipei')">台北</a></li>
+      <li><a href="#" onclick="getWeather('Taichung')">台中</a></li>
+      <li><a href="#" onclick="getWeather('Kaohsiung')">高雄</a></li>
+    </ul>
+
+    <h2>中國 
+      <a href="https://weather.cma.cn/" target="_blank">中國氣象局</a>
+    </h2>
+    <ul>
+      <li><a href="#" onclick="getWeather('Beijing')">北京</a></li>
+    </ul>
+
+    <h2>法國 
+      <a href="https://meteofrance.com/" target="_blank">法國氣象局</a>
+    </h2>
+    <ul>
+      <li><a href="#" onclick="getWeather('Paris')">巴黎</a></li>
+    </ul>
+
+    <h2>美國 
+      <a href="https://www.weather.gov/" target="_blank">美國國家氣象局</a>
+    </h2>
+    <ul>
+      <li><a href="#" onclick="getWeather('New York')">紐約</a></li>
+    </ul>
+  </div>
+
+  <h2>查詢結果</h2>
+  <div id="weather"></div>
+
+  <script>
+    const apiKey = "eee92af78eb3bc83e5c1cd39e2942893"; // 換成你自己的 OpenWeather API 金鑰
+
+    function getWeather(city) {
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&lang=zh_tw&units=metric`;
+
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          if (data.cod === 200) {
+            document.getElementById("weather").innerHTML = `
+              <h3>${data.name} 的天氣</h3>
+              <p>天氣狀況：${data.weather[0].description}</p>
+              <p>氣溫：${data.main.temp} °C</p>
+              <p>濕度：${data.main.humidity}%</p>
+              <p>風速：${data.wind.speed} m/s</p>
+            `;
+          } else {
+            document.getElementById("weather").innerHTML = `<p>找不到 ${city} 的天氣資料</p>`;
+          }
+        })
+        .catch(error => {
+          document.getElementById("weather").innerHTML = `<p>查詢失敗，請稍後再試</p>`;
+        });
+    }
+  </script>
+</body>
+</html>

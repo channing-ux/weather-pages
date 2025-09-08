@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>自選城市找天氣</title>
+</head>
+<body>
+  <h2>🌦 天氣查詢小站</h2>
+  
+  <!-- 輸入框 + 按鈕 -->
+  <input type="text" id="cityInput" placeholder="輸入城市名稱，例如：Taipei">
+  <button onclick="getWeather()">查詢</button>
+
+  <div id="weatherResult"></div>
+
+  <script>
+    const apiKey = "eee92af78eb3bc83e5c1cd39e2942893"; // ⚠️換成你自己的API金鑰
+
+    async function getWeather() {
+      const city = document.getElementById("cityInput").value;
+      if (!city) {
+        alert("請輸入城市名稱！");
+        return;
+      }
+
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=zh_tw`;
+
+      try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("城市找不到！");
+        const data = await response.json();
+
+        document.getElementById("weatherResult").innerHTML = `
+          <h3>${data.name} 的天氣</h3>
+          <p>氣溫：${data.main.temp}°C</p>
+          <p>天氣：${data.weather[0].description}</p>
+          <p>濕度：${data.main.humidity}%</p>
+        `;
+      } catch (error) {
+        document.getElementById("weatherResult").innerHTML = "❌ 查詢失敗，請確認城市名稱是否正確";
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>台北天氣小站</title>
+</head>
+<body>
+  <h1>台北天氣</h1>
+  <div id="weather">載入中...</div>
+  
+  <script>
+    async function getWeather() {
+      const apiKey = "eee92af78eb3bc83e5c1cd39e2942893"; // 記得換成你申請的 Key
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=Taipei&appid=${apiKey}&units=metric`;
+
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        document.getElementById("weather").innerText =
+          `🌡️ ${data.main.temp}°C，${data.weather[0].description}`;
+      
+      } catch (error) {
+        document.getElementById("weather").innerText = "抓取失敗";
+        console.error(error);
+      }
+    }
+
+    getWeather();
+  </script>
+  <a href="https://www.cwa.gov.tw/V8/C/W/County/County.html?CID=63">中央氣象署-台北</a>
+</body>
+</html>

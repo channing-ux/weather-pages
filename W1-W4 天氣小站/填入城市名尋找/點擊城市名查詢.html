@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>天氣小站</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; }
+    .city-list { margin: 20px; }
+    .city-item { margin: 10px; font-size: 18px; }
+    a { margin-left: 10px; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <h1>🌤 天氣小站</h1>
+  <div class="city-list">
+    <div class="city-item">
+      <button onclick="getWeather('Taipei')">台北</button>
+      <a href="https://www.cwb.gov.tw/" target="_blank">氣象署</a>
+    </div>
+    <div class="city-item">
+      <button onclick="getWeather('Taichung')">台中</button>
+      <a href="https://www.cwb.gov.tw/" target="_blank">氣象署</a>
+    </div>
+    <div class="city-item">
+      <button onclick="getWeather('Kaohsiung')">高雄</button>
+      <a href="https://www.cwb.gov.tw/" target="_blank">氣象署</a>
+    </div>
+    <div class="city-item">
+      <button onclick="getWeather('Beijing')">北京</button>
+      <a href="http://www.cma.gov.cn/" target="_blank">氣象署</a>
+    </div>
+    <div class="city-item">
+      <button onclick="getWeather('Paris')">巴黎</button>
+      <a href="https://meteofrance.com/" target="_blank">氣象署</a>
+    </div>
+    <div class="city-item">
+      <button onclick="getWeather('New York')">紐約</button>
+      <a href="https://www.weather.gov/" target="_blank">氣象署</a>
+    </div>
+  </div>
+
+  <h2 id="weatherResult">請選擇城市</h2>
+
+  <script>
+    const apiKey = "eee92af78eb3bc83e5c1cd39e2942893"; // 換成你的 OpenWeather API Key
+
+    function getWeather(city) {
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=zh_tw`;
+
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          if (data.cod === 200) {
+            const weather = `${data.name} 現在 ${data.weather[0].description}, 氣溫 ${data.main.temp}°C`;
+            document.getElementById("weatherResult").textContent = weather;
+          } else {
+            document.getElementById("weatherResult").textContent = "查詢失敗，請重試";
+          }
+        })
+        .catch(error => {
+          document.getElementById("weatherResult").textContent = "發生錯誤: " + error;
+        });
+    }
+  </script>
+</body>
+</html>
